@@ -36,7 +36,8 @@
     "date" : "",
     "deadlineTime" : "",
     "eventStartTime" : "",
-    "eventEndTime" : ""
+    "eventEndTime" : "",
+    "tag" : ""
   }, {
     "type" : "deadline",
     "status": "",
@@ -44,7 +45,8 @@
     "date" : "2022-03-15",
     "deadlineTime" : "0400",
     "eventStartTime" : null,
-    "eventEndTime" : null
+    "eventEndTime" : null,
+    "tag" : ""
   }, {
     "type" : "event",
     "status": "",
@@ -52,7 +54,8 @@
     "date" : "2022-03-15",
     "deadlineTime" : null,
     "eventStartTime" : "1800",
-    "eventEndTime" : "2000"
+    "eventEndTime" : "2000",
+    "tag" : ""
   }, {
     "type" : "deadline",
     "status": "",
@@ -60,6 +63,7 @@
     "date" : "2022-03-15",
     "deadlineTime" : "0400",
     "eventStartTime" : null,
-    "eventEndTime" : null
+    "eventEndTime" : null,
+    "tag" : ""
   } ]
 }

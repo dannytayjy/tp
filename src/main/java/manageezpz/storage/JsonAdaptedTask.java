@@ -1,9 +1,14 @@
 package manageezpz.storage;
 
+import java.util.List;
+import java.util.StringJoiner;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javafx.collections.ObservableList;
 import manageezpz.commons.exceptions.IllegalValueException;
+import manageezpz.model.person.Person;
 import manageezpz.model.task.Date;
 import manageezpz.model.task.Deadline;
 import manageezpz.model.task.Description;
@@ -11,8 +16,7 @@ import manageezpz.model.task.Event;
 import manageezpz.model.task.Task;
 import manageezpz.model.task.Time;
 import manageezpz.model.task.Todo;
-
-
+import manageezpz.model.tasktag.Tag;
 
 /**
  * Jackson-friendly version of {@link Task}.
@@ -27,7 +31,8 @@ class JsonAdaptedTask {
     private String deadlineTime;
     private String eventStartTime;
     private String eventEndTime;
-    private String status; // This status is for mark and unmark.
+    private String status;
+    private String tag;
 
 
     /**
@@ -38,7 +43,8 @@ class JsonAdaptedTask {
                            @JsonProperty("description") String description,
                            @JsonProperty("date") String date, @JsonProperty("deadlineTime") String deadlineTime,
                            @JsonProperty("eventStartTime") String eventStartTime,
-                           @JsonProperty("eventEndTime") String eventEndTime) {
+                           @JsonProperty("eventEndTime") String eventEndTime,
+                           @JsonProperty("tag") String tag) {
         this.description = new Description(description).toString();
         this.status = status;
         this.type = type;
@@ -46,17 +52,17 @@ class JsonAdaptedTask {
         this.deadlineTime = deadlineTime;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
+        this.tag = tag;
     }
 
     /**
      * Converts a given {@code Task} into this class for Jackson use.
      */
-    // Note to self: Do I need to convert String to LocalTime, so that toModelType can be able to create the task?
+
     public JsonAdaptedTask(Task source) {
-        // For future reference, this.marked = source.getMark()?
         description = source.getDescription().toString(); // Generally for all tasks
         type = source.getType(); // Generally for all tasks
-        status = source.getStatusIcon();
+        status = source.getStatusIcon(); // Generally for all tasks
         if (source instanceof Deadline) {
             this.date = ((Deadline) source).getDate().getDate(); // For Deadline
             this.deadlineTime = ((Deadline) source).getTime().getTime(); // For Deadline
@@ -70,6 +76,10 @@ class JsonAdaptedTask {
             this.eventStartTime = "";
             this.eventEndTime = "";
         }
+        List<Person> personList = source.getAssignees();
+        StringJoiner joiner = new StringJoiner(", ");
+        personList.forEach(item -> joiner.add(item.getName().toString()));
+        this.tag = joiner.toString();
     }
 
     /**
@@ -77,9 +87,10 @@ class JsonAdaptedTask {
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
-    public Task toModelType() throws IllegalValueException {
+    public Task toModelType(ObservableList<Person> persons) throws IllegalValueException {
         if (description == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Task.class.getSimpleName()));
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    Description.class.getSimpleName()));
         }
         if (type == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Task.class.getSimpleName()));
@@ -87,6 +98,10 @@ class JsonAdaptedTask {
         if (status == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Task.class.getSimpleName()));
         }
+        if (tag == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Tag.class.getSimpleName()));
+        }
+
         Description desc = new Description(description);
         boolean isDone = status.equals("X");
 
@@ -94,6 +109,19 @@ class JsonAdaptedTask {
             Todo newTodo = new Todo(desc);
             if (isDone) {
                 newTodo.setTaskDone();
+            }
+
+            String[] tagList = tag.split(",");
+            for (int i = 0; i < tagList.length; i++) {
+                String currentTag = tagList[i].trim();
+                for (int j = 0; j < persons.size(); j++) {
+                    Person matchedPerson = null;
+
+                    if (persons.get(j).getName().toString().equals(currentTag)) {
+                        matchedPerson = persons.get(j);
+                        newTodo.addAssignees(matchedPerson);
+                    }
+                }
             }
             return newTodo;
         } else if (type.equals("deadline")) {
@@ -103,6 +131,17 @@ class JsonAdaptedTask {
             if (isDone) {
                 newDeadline.setTaskDone();
             }
+            String[] tagList = tag.split(",");
+            for (int i = 0; i < tagList.length; i++) {
+                String currentTag = tagList[i].trim();
+                for (int j = 0; j < persons.size(); j++) {
+                    Person matchedPerson = null;
+                    if (persons.get(j).getName().toString().equals(currentTag)) {
+                        matchedPerson = persons.get(j);
+                        newDeadline.addAssignees(matchedPerson);
+                    }
+                }
+            }
             return newDeadline;
         } else {
             Date currEventDate = new Date(date);
@@ -111,6 +150,17 @@ class JsonAdaptedTask {
             Event newEvent = new Event(desc, currEventDate, currEventStartTime, currEventEndTime);
             if (isDone) {
                 newEvent.setTaskDone();
+            }
+            String[] tagList = tag.split(",");
+            for (int i = 0; i < tagList.length; i++) {
+                String currentTag = tagList[i].trim();
+                for (int j = 0; j < persons.size(); j++) {
+                    Person matchedPerson = null;
+                    if (persons.get(j).getName().toString().equals(currentTag)) {
+                        matchedPerson = persons.get(j);
+                        newEvent.addAssignees(matchedPerson);
+                    }
+                }
             }
             return newEvent;
         }

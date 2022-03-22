@@ -194,7 +194,6 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
-
         setPersons(newData.getPersonList());
         setTasks(newData.getTaskList());
     }
