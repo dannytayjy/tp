@@ -2,6 +2,7 @@ package manageezpz.model.task;
 
 import static manageezpz.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +34,7 @@ public class Task {
         this.taskDescription = taskDescription;
         this.isDone = false;
         this.type = "";
+        this.assignees = new ArrayList<>();
     }
 
     /**
@@ -47,17 +49,13 @@ public class Task {
         }
     }
 
-    /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
-     */
-    /*
-    public Set<Tag> getTags() {
-       return Collections.unmodifiableSet(tags);
+    public List<Person> getAssignees() {
+        return this.assignees;
     }
 
-     */
-
+    public void addAssignees(Person person) {
+        this.assignees.add(person);
+    }
 
     public void setTaskDone() {
         this.isDone = true;
