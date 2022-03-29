@@ -10,16 +10,33 @@ public class Event extends Task {
     private Time endTime;
 
     /**
-     * Constructor for the Task class.
+     * Constructor for the Event class.
      *
      * @param taskDescription information about the task.
      */
     public Event(Description taskDescription, Date date, Time startTime, Time endTime) {
+        this.type = "event";
         this.description = taskDescription;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.type = "event";
+    }
+
+    /**
+     * Constructor for the Event class. This is used to initialise a new Deadline
+     * class for changes to be made.
+     *
+     * @param event Event task
+     */
+    public Event(Event event) {
+        this.type = event.getType();
+        this.description = event.getDescription();
+        this.date = event.getDate();
+        this.startTime = event.getStartTime();
+        this.endTime = event.getEndTime();
+        this.isDone = event.isDone();
+        this.priority = event.getPriority();
+        this.assignees = event.getAssignees();
     }
 
     public Date getDate() {
@@ -33,7 +50,6 @@ public class Event extends Task {
     public Time getEndTime() {
         return endTime;
     }
-
 
     @Override
     public String getType() {
@@ -54,8 +70,8 @@ public class Event extends Task {
 
     /**
      * Returns the string representation of an event.
-     * @return a string representation of the event, consisting of its description, formatted date,
-     * starting time and ending time.
+     * @return a string representation of the event, consisting of its description,
+     * formatted date, starting time and ending time.
      */
     @Override
     public String toString() {

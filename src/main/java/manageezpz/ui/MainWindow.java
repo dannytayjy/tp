@@ -190,8 +190,8 @@ public class MainWindow extends UiPart<Stage> {
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             // TAKE NOTE
-            taskListPanel = new TaskListPanel(logic.getFilteredTaskList());
-            taskListPanelPlaceholder.getChildren().add(taskListPanel.getRoot());
+            /*taskListPanel = new TaskListPanel(logic.getFilteredTaskList());
+            taskListPanelPlaceholder.getChildren().add(taskListPanel.getRoot());*/
 
             if (commandResult.isShowHelp()) {
                 handleHelp();

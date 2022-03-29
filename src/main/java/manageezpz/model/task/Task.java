@@ -14,12 +14,12 @@ public abstract class Task implements Comparable<Task> {
     protected Priority priority = Priority.NONE;
 
     // Data fields
-    private List<Person> assignees = new ArrayList<>();
+    protected List<Person> assignees = new ArrayList<>();
 
     /**
      * Constructor for the Task class.
-     * {@code Date taskDate} has a default value that will be changed if the object inheriting the Task object
-     * is a Deadline or Event object. If object is a Todo object, this field will be ignored.
+     * {@code Date taskDate} has a default value that will be changed if the object inheriting the Task
+     * object is a Deadline or Event object. If object is a Todo object, this field will be ignored.
      */
     public Task() {
     }
@@ -52,6 +52,10 @@ public abstract class Task implements Comparable<Task> {
 
     public void setPriority(String priority) {
         this.priority = Priority.valueOf(priority);
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     public Priority getPriority() {

@@ -308,15 +308,6 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Tags the task in the task list to a person in the address book.
-     * @param task the task to be tagged.
-     * @param person the person to be tagged to the task.
-     */
-    public void tagTask(Task task, Person person) {
-        task.assignedTo(person);
-    }
-
-    /**
      * Checks if a given task has a priority tagged to it.
      * @param task the task to be checked.
      * @return true if the task is tagged with a prioirity, false otherwise.
@@ -331,19 +322,45 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
         return returnValue;
     }
+
     public void setTask(Task target, Task editedTask) {
         requireNonNull(editedTask);
 
         tasks.setTask(target, editedTask);
     }
+
+    /**
+     * Tags the task in the task list to a person in the address book.
+     * @param task the task to be tagged.
+     * @param person the person to be tagged to the task.
+     */
+    public void tagTask(Task task, Person person) {
+        requireNonNull(task);
+        requireNonNull(person);
+        task.assignedTo(person);
+    }
+
     /**
      * Remove the Person from the Task, also decreasing the person's task count.
      * @param task the task affected
      * @param person the person to be untagged from task
      */
     public void untagTask(Task task, Person person) {
+        requireNonNull(task);
+        requireNonNull(person);
         person.decreaseTaskCount();
         task.removeAssigned(person);
+    }
+
+    /**
+     * Checks if the Person is tagged to the task.
+     * @param task the task
+     * @param person the person
+     */
+    public boolean isPersonTaggedToTask(Task task, Person person) {
+        requireNonNull(task);
+        requireNonNull(person);
+        return task.getAssignees().contains(person);
     }
 
     //// person-level operations

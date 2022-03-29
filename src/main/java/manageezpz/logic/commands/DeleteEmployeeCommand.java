@@ -13,10 +13,9 @@ import manageezpz.model.person.Person;
 import manageezpz.model.task.Task;
 
 /**
- * Deletes a person identified using it's displayed index from the address book.
+ * Deletes a person identified using its displayed index from the address book.
  */
 public class DeleteEmployeeCommand extends Command {
-
     public static final String COMMAND_WORD = "deleteEmployee";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -28,6 +27,11 @@ public class DeleteEmployeeCommand extends Command {
 
     private final Index targetIndex;
 
+    /**
+     * Initializes a DeleteEmployeeCommand with the given targetIndex.
+     *
+     * @param targetIndex Index of the Employee to be deleted
+     */
     public DeleteEmployeeCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
@@ -43,13 +47,17 @@ public class DeleteEmployeeCommand extends Command {
         }
 
         Person personToDelete = lastShownPersonList.get(targetIndex.getZeroBased());
-        List<Task> taskList = lastShownTaskList.stream()
-                .filter(task -> task.getAssignees().contains(personToDelete)).collect(Collectors.toList());
 
-        for (int j = 0; j < taskList.size(); j++) {
-            model.untagTask(taskList.get(j), personToDelete);
+        List<Task> taskList = lastShownTaskList.stream()
+                .filter(task -> task.getAssignees().contains(personToDelete))
+                .collect(Collectors.toList());
+
+        for (Task task : taskList) {
+            model.untagTask(task, personToDelete);
         }
+
         model.deletePerson(personToDelete);
+
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, personToDelete));
     }
 

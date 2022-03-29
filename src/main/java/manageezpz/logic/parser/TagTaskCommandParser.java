@@ -7,34 +7,47 @@ import static manageezpz.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.stream.Stream;
 
+import manageezpz.commons.core.index.Index;
 import manageezpz.logic.commands.TagTaskCommand;
 import manageezpz.logic.parser.exceptions.ParseException;
 
 public class TagTaskCommandParser implements Parser<TagTaskCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the AddDeadlineTaskCommand
-     * and returns an AddDeadlineTaskCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the TagTaskCommand
+     * and returns an TagTaskCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
     public TagTaskCommand parse(String args) throws ParseException {
+        Index index;
+
         ArgumentMultimap argMultimapTag =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+
         if (!arePrefixesPresent(argMultimapTag, PREFIX_NAME)) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     TagTaskCommand.MESSAGE_USAGE));
         }
+
         if (argMultimapTag.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_EMPTY_TASK_NUMBER,
                     TagTaskCommand.MESSAGE_USAGE));
         }
+
+        try {
+            String[] argsArr = args.trim().split(" ");
+            index = ParserUtil.parseIndex(argsArr[0]);
+        } catch (ParseException pe) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    TagTaskCommand.MESSAGE_USAGE), pe);
+        }
+
         String name = argMultimapTag.getValue(PREFIX_NAME).get();
         if (name.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_EMPTY_NAME,
                     TagTaskCommand.MESSAGE_USAGE));
         }
-        String[] argsArr = args.trim().split(" ");
-        int index = ParserUtil.parseIndex(argsArr[0]).getZeroBased();
+
         return new TagTaskCommand(index, name);
     }
 

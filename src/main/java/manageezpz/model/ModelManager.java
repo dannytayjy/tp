@@ -217,10 +217,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean isTagged(Task task, Person person) {
-        requireNonNull(task);
-        requireNonNull(person);
-        return task.getAssignees().contains(person);
+    public boolean isPersonTaggedToTask(Task task, Person person) {
+        return addressBook.isPersonTaggedToTask(task, person);
     }
 
     @Override

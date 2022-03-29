@@ -205,7 +205,7 @@ public class AddEmployeeCommandTest {
         }
 
         @Override
-        public boolean isTagged(Task task, Person p) {
+        public boolean isPersonTaggedToTask(Task task, Person p) {
             throw new AssertionError("This method should not be called.");
         }
 

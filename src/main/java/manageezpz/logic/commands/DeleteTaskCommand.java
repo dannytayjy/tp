@@ -12,11 +12,10 @@ import manageezpz.model.person.Person;
 import manageezpz.model.task.Task;
 
 /**
- * Deletes a task identified using it's displayed index from the address book.
+ * Deletes a task identified using its displayed index from the address book.
  */
 public class DeleteTaskCommand extends Command {
-
-    public static final String COMMAND_WORD = "delete";
+    public static final String COMMAND_WORD = "deleteTask";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the task identified by the index number used in the displayed task list.\n"
@@ -27,6 +26,11 @@ public class DeleteTaskCommand extends Command {
 
     private final Index targetIndex;
 
+    /**
+     * Initializes a DeleteTaskCommand with the given targetIndex.
+     *
+     * @param targetIndex Index of the Task to be deleted
+     */
     public DeleteTaskCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
@@ -42,6 +46,7 @@ public class DeleteTaskCommand extends Command {
 
         Task taskToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deleteTask(taskToDelete);
+
         List<Person> affectedPersonList = taskToDelete.getAssignees();
         affectedPersonList.forEach(Person::decreaseTaskCount);
 

@@ -191,7 +191,7 @@ public interface Model {
     /**
      * Returns true if a {@code Task} is tagged.
      */
-    boolean isTagged(Task task, Person p);
+    boolean isPersonTaggedToTask(Task task, Person p);
 
     /**
      * Returns a list of all tasks.

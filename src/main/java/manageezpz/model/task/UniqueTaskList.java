@@ -57,29 +57,20 @@ public class UniqueTaskList implements Iterable<Task> {
 
     /**
      * Marks a task in the list as done.
-     * The task must not already exist in the list.
+     * The task must exist in the list.
      */
     public void markTask(Task toMark) {
         requireNonNull(toMark);
-        for (Task value : internalList) {
-            if (value.equals(toMark)) {
-                value.setTaskDone();
-            }
-        }
+        toMark.setTaskDone();
     }
 
     /**
      * Unmarks a task in the list as not done yet.
-     * The task must not already exist in the list.
+     * The task must exist in the list.
      */
     public void unmarkTask(Task toUnmark) {
         requireNonNull(toUnmark);
-
-        for (Task value : internalList) {
-            if (value.equals(toUnmark)) {
-                value.setTaskNotDone();
-            }
-        }
+        toUnmark.setTaskNotDone();
     }
 
     /**
