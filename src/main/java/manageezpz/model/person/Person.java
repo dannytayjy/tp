@@ -18,20 +18,8 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email) {
-        requireAllNonNull(name, phone, email);
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.numOfTask = 0;
-    }
-
-    /**
-     * Constructor for the Person class. This is used to initialise a new Person
-     * class for changes to be made.
-     */
     public Person(Name name, Phone phone, Email email, int numOfTask) {
-        requireAllNonNull(name, phone, email, numOfTask);
+        requireAllNonNull(name, phone, email);
         this.name = name;
         this.phone = phone;
         this.email = email;

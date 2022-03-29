@@ -26,7 +26,7 @@ class JsonAdaptedPerson {
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("Task Amount") int numOfTask) {
+            @JsonProperty("email") String email, @JsonProperty("numOfTask") int numOfTask) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -75,7 +75,7 @@ class JsonAdaptedPerson {
             throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
         }
         final Email modelEmail = new Email(email);
-        return new Person(modelName, modelPhone, modelEmail);
+        return new Person(modelName, modelPhone, modelEmail, numOfTask);
     }
 
 }

@@ -37,7 +37,7 @@ public class AddEmployeeCommandParser implements Parser<AddEmployeeCommand> {
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
 
-        Person person = new Person(name, phone, email);
+        Person person = new Person(name, phone, email, 0);
 
         return new AddEmployeeCommand(person);
     }
